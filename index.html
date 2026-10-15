@@ -37,6 +37,7 @@ camera.position.set(0, 0, 3);
 scene.add(new SparkRenderer({ renderer }));
 
 const splat = new SplatMesh({ url: "splat.sog" });
+splat.quaternion.set(1, 0, 0, 0); // 180° um X: Szene steht sonst auf dem Kopf
 scene.add(splat);
 splat.initialized.then(() => document.getElementById("msg").remove())
   .catch(e => { console.error(e); document.getElementById("msg").textContent = "Fehler: " + (e?.message || e); });
