@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3DGS Wuppertal</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #111; color: #eee; font-family: system-ui, sans-serif; overflow: hidden; }
+  #msg { position: fixed; inset: 0; display: grid; place-items: center; pointer-events: none; }
+  #dl { position: fixed; left: 12px; bottom: 12px; font-size: 14px; }
+  #dl a { color: #9cf; }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/",
+  "@sparkjsdev/spark": "https://cdn.jsdelivr.net/npm/@sparkjsdev/spark@2.3.1/dist/spark.module.js"
+} }
+</script>
+</head>
+<body>
+<div id="msg">Lade 3D-Szene …</div>
+<div id="dl"><a href="splat-2.spz" download>splat-2.spz herunterladen</a></div>
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { SparkRenderer, SplatMesh } from "@sparkjsdev/spark";
+
+const renderer = new THREE.WebGLRenderer({ antialias: false });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.01, 1000);
+camera.position.set(0, 0, 3);
+scene.add(new SparkRenderer({ renderer }));
+
+const splat = new SplatMesh({ url: "splat-2.spz" });
+// Gängige Konvention: 3DGS-Daten stehen auf dem Kopf; bei Bedarf entfernen.
+splat.quaternion.set(1, 0, 0, 0);
+scene.add(splat);
+splat.initialized.then(() => document.getElementById("msg").remove())
+  .catch(e => { document.getElementById("msg").textContent = "Fehler: " + e.message; });
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
+addEventListener("resize", () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+renderer.setAnimationLoop(() => { controls.update(); renderer.render(scene, camera); });
+</script>
+</body>
+</html>
