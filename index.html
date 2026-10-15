@@ -37,8 +37,6 @@ camera.position.set(0, 0, 3);
 scene.add(new SparkRenderer({ renderer }));
 
 const splat = new SplatMesh({ url: "splat-2.sog" });
-// Gängige Konvention: 3DGS-Daten stehen auf dem Kopf; bei Bedarf entfernen.
-splat.quaternion.set(1, 0, 0, 0);
 scene.add(splat);
 splat.initialized.then(() => document.getElementById("msg").remove())
   .catch(e => { console.error(e); document.getElementById("msg").textContent = "Fehler: " + (e?.message || e); });
