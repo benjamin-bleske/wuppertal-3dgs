@@ -20,7 +20,7 @@
 </head>
 <body>
 <div id="msg">Lade 3D-Szene …</div>
-<div id="dl"><a href="splat-2.spz" download>splat-2.spz herunterladen</a></div>
+<div id="dl"><a href="splat.sog" download>splat.sog herunterladen</a></div>
 <script type="module">
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -36,7 +36,7 @@ const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.01, 1
 camera.position.set(0, 0, 3);
 scene.add(new SparkRenderer({ renderer }));
 
-const splat = new SplatMesh({ url: "splat-2.sog" });
+const splat = new SplatMesh({ url: "splat.sog" });
 scene.add(splat);
 splat.initialized.then(() => document.getElementById("msg").remove())
   .catch(e => { console.error(e); document.getElementById("msg").textContent = "Fehler: " + (e?.message || e); });
