@@ -39,7 +39,17 @@ scene.add(new SparkRenderer({ renderer }));
 const splat = new SplatMesh({ url: "splat.sog" });
 splat.quaternion.set(1, 0, 0, 0); // 180° um X: Szene steht sonst auf dem Kopf
 scene.add(splat);
-splat.initialized.then(() => document.getElementById("msg").remove())
+splat.initialized.then(() => {
+    document.getElementById("msg").remove();
+    // Startansicht: Kamera um 35 % der Szenenhöhe angehoben, Blick auf die Mitte
+    splat.updateMatrixWorld(true);
+    const box = splat.getBoundingBox(true).applyMatrix4(splat.matrixWorld);
+    const c = box.getCenter(new THREE.Vector3()), size = box.getSize(new THREE.Vector3());
+    const dist = Math.max(size.x, size.z) * 0.9;
+    camera.position.set(c.x, c.y + size.y * 0.35, c.z + dist);
+    controls.target.copy(c);
+    controls.update();
+  })
   .catch(e => { console.error(e); document.getElementById("msg").textContent = "Fehler: " + (e?.message || e); });
 
 const controls = new OrbitControls(camera, renderer.domElement);
