@@ -45,7 +45,7 @@ splat.initialized.then(() => {
     splat.updateMatrixWorld(true);
     const box = splat.getBoundingBox(true).applyMatrix4(splat.matrixWorld);
     const c = box.getCenter(new THREE.Vector3()), size = box.getSize(new THREE.Vector3());
-    const dist = size.z / 2 + 2; // 2 m Abstand zur Tischkante (Einheiten = Meter)
+    const dist = size.z / 2 + 4; // 4 m Abstand zur Tischkante (Einheiten = Meter)
     camera.position.set(c.x, c.y + size.y * 0.35, c.z + dist);
     controls.target.copy(c);
     controls.update();
